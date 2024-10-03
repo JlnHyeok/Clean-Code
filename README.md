@@ -4,7 +4,7 @@
 <img width="683" alt="image" src="https://github.com/user-attachments/assets/ac10d56f-6228-417c-8b87-ac2dc0ba75fd">
 
 
-### 설계 선택 이유
+### 설계 이유
 1. 다대다 관계:
 Student와 Lecture 엔티티는 다대다 관계를 가지고 있습니다. 즉, 한 학생은 여러 강의에 등록할 수 있고, 각 강의는 여러 학생에 의해 등록될 수 있습니다. 이는 LectureRegistration 조인 테이블을 통해 구현되며, 이 테이블은 Student와 Lecture 테이블의 외래 키를 포함.
 
