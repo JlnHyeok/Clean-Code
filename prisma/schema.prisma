@@ -6,27 +6,28 @@
 
 generator client {
   provider = "prisma-client-js"
+
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 // 하나의 유저는 여러 강의에 등록할 수 있고, 하나의 강의는 여러 유저에 의해 등록될 수 있다. 1대다 관계
-model User {
+model Student {
   id        Int   @id @default(autoincrement())
-  name      String?
+  name      String
   registrations LectureRegistration[] // 유저는 여러 강의에 등록할 수 있다.
 
-  @@map("users")
+  @@map("students")
 }
 
 model Lecture {
   id        Int   @id @default(autoincrement())
   title     String
   tutor     String
-  date      DateTime 
+  createdAt      DateTime 
   capacity  Int
   currentStudents   Int
   registrations LectureRegistration[] // 강의는 여러 유저에 의해 등록될 수 있다.
@@ -38,12 +39,12 @@ model Lecture {
 // Prisma에서는 다대다 관계를 구현하기 위해 중간 테이블을 사용한다.
 model LectureRegistration {
   id        Int   @id @default(autoincrement())
-  user      User  @relation(fields: [userId], references: [id]) // 유저와의 관계 정의 및 외래키 설정
-  userId    Int
+  student      Student  @relation(fields: [studentId], references: [id]) // 유저와의 관계 정의 및 외래키 설정
+  studentId    Int
   lecture   Lecture @relation(fields: [lectureId], references: [id]) // 강의와의 관계 정의 및 외래키 설정
   lectureId Int
 
   // prisma 에서는 특정 조합의 중복을 방지하기 위해 unique 제약을 설정할 수 있다.
-  @@unique([userId, lectureId], name: "user_lecture_unique") // 동일한 userId 와 lectureId 가 중복되지 않도록 설정. 동일한 유저가 동일한 강의에 여러 번 등록되는 것을 방지
+  // @@unique([studentId, lectureId], name: "student_lecture_unique") // 동일한 userId 와 lectureId 가 중복되지 않도록 설정. 동일한 유저가 동일한 강의에 여러 번 등록되는 것을 방지
   @@map("lecture_registrations")
 }
